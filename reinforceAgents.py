@@ -4,7 +4,8 @@ from pacman import GameState
 import random,util,math
 from featureExtractors import *
 import numpy as np
-
+import torch.nn.functional as F
+import torch
 
 class Policy:
     def __init__(self) -> None:
@@ -27,7 +28,7 @@ class Policy:
             output: [pr(a), pr(b), pr(c), pr(d)]
         """
         denominator = sum([math.exp(element) for element in x]) + 1e-12
-        return [element/denominator for element in x]
+        return [math.exp(element)/denominator for element in x]
 
     
     def forward(self, x:list[dict])->float:
@@ -42,7 +43,9 @@ class Policy:
                 if self.weights[feature]:
                     h_w_x[i] = h_w_x[i] + self.weights[feature] * x[i][feature]
                 else:
-                    self.weights[feature] = random.normalvariate(1, -1)
+                    self.weights[feature] = random.uniform(0, -1)
+                    h_w_x[i] = h_w_x[i] + self.weights[feature] * x[i][feature]
+
         pi = self.softmax(h_w_x)
         return pi
 
@@ -68,7 +71,7 @@ class Policy:
             Gradient Asscent
         """
         for feature in self.weights:
-            self.weights[feature] = self.weights[feature] + ( lr * factor * self.grad_weights[feature])
+            self.weights[feature] = self.weights[feature] + (lr * factor * self.grad_weights[feature])
 
 
 
@@ -85,13 +88,13 @@ class ReinforceAgent(game.Agent):
             theta <- theta + learing_rate * gradient_policy_loss
     """
 
-    def __init__(self, numTraining=100, epsilon=0.5, alpha=1e-2, gamma=0.8):
+    def __init__(self, numTraining=100, epsilon=0.8, alpha=1e-2, gamma=0.9):
         print("REINFORCE Agent initialized")
-
+        self.numTraining = numTraining
         # Parameters:
         self.gamma = gamma #Discount factor
         self.alpha = alpha #Learing rate
-
+        self.epsilon = epsilon
         self.policy = Policy()
 
         # episode track
@@ -108,7 +111,7 @@ class ReinforceAgent(game.Agent):
         if state.isWin() or state.isLose():
             reward = state.getScore()-self.last_score
             self.episode_reward += reward
-            self.policy.rewards.append(reward)
+            self.policy.rewards.append(reward-1)
 
 
         # Updating the trainable parameters
@@ -180,12 +183,20 @@ class ReinforceAgent(game.Agent):
         legal_action = state.getLegalPacmanActions()
         feature_extractor = SimpleExtractor()
         features_s_a = [feature_extractor.getFeatures(state,action) for action in legal_action]
-
+        
         action_probs = self.policy.forward(features_s_a)
 
         # Chossing action based on computed softmax action proabilites
-        action_index = random.choices(range(len(action_probs)), weights=action_probs)[0]
-        # action_index = action_probs.index(max(action_probs))
+        if self.numTraining==self.episode:        
+            action_index = action_probs.index(max(action_probs))
+        else:
+            # action_index = random.choices(range(len(action_probs)), weights=action_probs)[0]
+        
+            action_index = random.choices(
+                [action_probs.index(max(action_probs)),random.choices(range(len(action_probs)), weights=action_probs)[0]],
+                weights=[self.epsilon,1-self.epsilon]
+            )[0]
+
 
         action = legal_action[action_index]
 
