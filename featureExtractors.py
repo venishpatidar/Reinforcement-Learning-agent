@@ -72,7 +72,7 @@ class SimpleExtractor(FeatureExtractor):
     - whether a ghost is one step away
     """
 
-    def getFeatures(self, state, action=None):
+    def getFeatures(self, state, action):
         # extract the grid of food and wall locations and get the ghost locations
         food = state.getFood()
         walls = state.getWalls()
@@ -84,11 +84,7 @@ class SimpleExtractor(FeatureExtractor):
 
         # compute the location of pacman after he takes the action
         x, y = state.getPacmanPosition()
-        # Modifying in order to accomodate Reinforce method
-        if action:
-            dx, dy = Actions.directionToVector(action)
-        else:
-            dx,dy=0,0
+        dx, dy = Actions.directionToVector(action)
             
         next_x, next_y = int(x + dx), int(y + dy)
             
