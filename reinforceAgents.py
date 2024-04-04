@@ -7,6 +7,8 @@ import numpy as np
 import torch.nn.functional as F
 import torch
 
+random.seed(10)
+
 class Policy:
     def __init__(self) -> None:
 
@@ -43,7 +45,8 @@ class Policy:
                 if self.weights[feature]:
                     h_w_x[i] = h_w_x[i] + self.weights[feature] * x[i][feature]
                 else:
-                    self.weights[feature] = random.uniform(0, -1)
+                    self.weights[feature] = random.uniform(-10, 10)
+                    print(self.weights[feature] )
                     h_w_x[i] = h_w_x[i] + self.weights[feature] * x[i][feature]
 
         pi = self.softmax(h_w_x)
@@ -187,15 +190,15 @@ class ReinforceAgent(game.Agent):
         action_probs = self.policy.forward(features_s_a)
 
         # Chossing action based on computed softmax action proabilites
-        if self.numTraining==self.episode:        
+        if self.numTraining<=self.episode:        
             action_index = action_probs.index(max(action_probs))
         else:
-            # action_index = random.choices(range(len(action_probs)), weights=action_probs)[0]
+            action_index = random.choices(range(len(action_probs)), weights=action_probs)[0]
         
-            action_index = random.choices(
-                [action_probs.index(max(action_probs)),random.choices(range(len(action_probs)), weights=action_probs)[0]],
-                weights=[self.epsilon,1-self.epsilon]
-            )[0]
+            # action_index = random.choices(
+            #     [action_probs.index(max(action_probs)),random.choices(range(len(action_probs)), weights=action_probs)[0]],
+            #     weights=[self.epsilon,1-self.epsilon]
+            # )[0]
 
 
         action = legal_action[action_index]
