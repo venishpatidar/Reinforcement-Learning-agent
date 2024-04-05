@@ -71,12 +71,13 @@ class SimpleExtractor(FeatureExtractor):
     - whether a ghost collision is imminent
     - whether a ghost is one step away
     """
-
-    def getFeatures(self, state, action):
+    def getFeatures(self, state, action=None):
         # extract the grid of food and wall locations and get the ghost locations
         food = state.getFood()
         walls = state.getWalls()
-        ghosts = state.getGhostPositions()
+        # ghosts = state.getGhostPositions()
+        ghosts_state = state.getGhostStates()
+        ghost_positions_scared = [(ghost.getPosition(),ghost.scaredTimer) for ghost in ghosts_state]
 
         features = util.Counter()
 
@@ -84,13 +85,18 @@ class SimpleExtractor(FeatureExtractor):
 
         # compute the location of pacman after he takes the action
         x, y = state.getPacmanPosition()
-        dx, dy = Actions.directionToVector(action)
+        if action:
+            dx, dy = Actions.directionToVector(action)
+        else:
+            dx, dy = 0,0
             
         next_x, next_y = int(x + dx), int(y + dy)
             
 
         # count the number of ghosts 1-step away
-        features["#-of-ghosts-1-step-away"] = sum((next_x, next_y) in Actions.getLegalNeighbors(g, walls) for g in ghosts)
+        # features["#-of-ghosts-1-step-away"] = sum((next_x, next_y) in Actions.getLegalNeighbors(g, walls) for g in ghosts)
+        # Now also checks if the ghost is scared or not
+        features["#-of-ghosts-1-step-away"] = sum((next_x, next_y) in Actions.getLegalNeighbors(g, walls) for g,s in ghost_positions_scared if s==0)
 
         # if there is no danger of ghosts then add the food feature
         if not features["#-of-ghosts-1-step-away"] and food[next_x][next_y]:

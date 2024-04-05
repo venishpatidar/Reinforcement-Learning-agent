@@ -18,6 +18,8 @@ from featureExtractors import *
 
 import random,util,math
 
+random.seed(10)
+
 class QLearningAgent(ReinforcementAgent):
     """
       Q-Learning Agent
@@ -190,7 +192,12 @@ class ApproximateQAgent(PacmanQAgent):
         features = self.featExtractor.getFeatures(state, action)
         difference = (reward + self.discount * self.getValue(nextState))-self.getQValue(state,action)
         for feature in features.keys():
-          self.weights[feature] = self.weights[feature] + (self.alpha * difference * features[feature])
+          if self.weights[feature]:
+            self.weights[feature] = self.weights[feature] + (self.alpha * difference * features[feature])
+          else:
+            # Randomly intialize weights
+            self.weights[feature] = random.uniform(-10, 10)
+            self.weights[feature] = self.weights[feature] + (self.alpha * difference * features[feature])
 
     def final(self, state):
         "Called at the end of each game."
