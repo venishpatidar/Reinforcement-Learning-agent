@@ -16,6 +16,8 @@ from game import Directions, Agent, Actions
 
 import random,util,time
 
+NUM_EPS_UPDATE = 100
+
 class ValueEstimationAgent(Agent):
     """
       Abstract agent which assigns values to (state,action)
@@ -160,7 +162,7 @@ class ReinforcementAgent(ValueEstimationAgent):
     def isInTesting(self):
         return not self.isInTraining()
 
-    def __init__(self, actionFn = None, numTraining=100, epsilon=0.5, alpha=0.5, gamma=1):
+    def __init__(self, filename=None, actionFn = None, numTraining=100, epsilon=0.5, alpha=0.5, gamma=1):
         """
         actionFn: Function which takes a state and returns the list of legal actions
 
@@ -179,7 +181,7 @@ class ReinforcementAgent(ValueEstimationAgent):
         self.epsilon = float(epsilon)
         self.alpha = float(alpha)
         self.discount = float(gamma)
-
+        self.filename = filename
     ################################
     # Controls needed for Crawler  #
     ################################
@@ -233,20 +235,30 @@ class ReinforcementAgent(ValueEstimationAgent):
             self.lastWindowAccumRewards = 0.0
         self.lastWindowAccumRewards += state.getScore()
 
-        NUM_EPS_UPDATE = 100
         if self.episodesSoFar % NUM_EPS_UPDATE == 0:
             print('Reinforcement Learning Status:')
             windowAvg = self.lastWindowAccumRewards / float(NUM_EPS_UPDATE)
             if self.episodesSoFar <= self.numTraining:
                 trainAvg = self.accumTrainRewards / float(self.episodesSoFar)
-                print('\tCompleted %d out of %d training episodes' % (
-                       self.episodesSoFar,self.numTraining))
-                print('\tAverage Rewards over all training: %.2f' % (
-                        trainAvg))
+                print('\tCompleted %d out of %d training episodes' % (self.episodesSoFar,self.numTraining))
+                print('\tAverage Rewards over all training: %.2f' % (trainAvg))
+                if self.filename:
+                    with open('./results/ApproximateQAgent/train_avg_'+self.filename,'a') as f:
+                        f.write(str(trainAvg)+'\n')
+                    with open('./results/ApproximateQAgent/train_window_avg_'+self.filename,'a') as f:
+                        f.write(str(windowAvg)+'\n')
+
             else:
                 testAvg = float(self.accumTestRewards) / (self.episodesSoFar - self.numTraining)
                 print('\tCompleted %d test episodes' % (self.episodesSoFar - self.numTraining))
                 print('\tAverage Rewards over testing: %.2f' % testAvg)
+    
+                if self.filename:
+                    with open('./results/ApproximateQAgent/test_avg_'+self.filename,'a') as f:
+                        f.write(str(testAvg)+'\n')
+                    with open('./results/ApproximateQAgent/test_window_avg_'+self.filename,'a') as f:
+                        f.write(str(windowAvg)+'\n')
+
             print('\tAverage Rewards for last %d episodes: %.2f'  % (
                     NUM_EPS_UPDATE,windowAvg))
             print('\tEpisode took %.2f seconds' % (time.time() - self.episodeStartTime))

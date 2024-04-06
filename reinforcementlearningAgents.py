@@ -1,9 +1,71 @@
-import game
 import random,util,math
+from game import Agent
 from pacman import GameState
 from featureExtractors import *
 
+# Global parameters
 random.seed(10)
+NUM_EPS_UPDATE = 100
+
+class ReinforcementLearingAgent(Agent):
+    def __init__(self, filename=None, agent=None, numTraining=100, epsilon=0.8, alpha=1e-2, gamma=0.9):
+        self.numTraining = numTraining
+        # Parameters:
+        self.filename = filename
+        self.gamma = gamma #Discount factor
+        self.alpha = alpha #Learing rate
+        self.epsilon = epsilon
+        self.feature_extractor = SimpleExtractor()
+        self.agent = agent
+        # episode track
+        self.episode = 0
+
+        # Train result track over all training
+        self.total_accumulated_reward = 0.0
+        # Result accumulated over a window 
+        self.window_accumulated_reward = 0.0
+        
+        self.last_score = 0.0
+        self.last_action = None
+        self.last_state = None
+
+    def results(self):
+        """
+            Displays results after the end of every number of episode NUM_EPS_UPDATE
+            Saves the results to file 
+        """
+        if self.episode % NUM_EPS_UPDATE == 0:
+            print('Actor Ctitic Agent Learning Status:')
+            window_avg = self.window_accumulated_reward / float(NUM_EPS_UPDATE)
+            # In training
+            if self.episode <= self.numTraining:
+                train_avg = self.total_accumulated_reward / float(self.episode)
+                print('\tCompleted %d out of %d training episodes' % (self.episode,self.numTraining))
+                print('\tAverage Rewards over all training: %.2f' % (train_avg))
+
+                if self.filename:
+                    with open('./results/'+ self.agent+'/train_avg_'+self.filename,'a') as f:
+                        f.write(str(train_avg)+'\n')
+                    with open('./results/'+self.agent+'/train_window_avg_'+self.filename,'a') as f:
+                        f.write(str(window_avg)+'\n')
+
+                # Reseting for test accumulation
+                if self.episode==self.numTraining:
+                    self.total_accumulated_reward=0.0
+            # In testing
+            else:
+                test_avg = self.total_accumulated_reward / float(self.episode-self.numTraining)
+                print('\tCompleted %d test episodes' % (self.episode - self.numTraining))
+                print('\tAverage Rewards over testing: %.2f' % test_avg)
+                if self.filename:
+                    with open('./results/'+self.agent+'/test_avg_'+self.filename,'a') as f:
+                        f.write(str(test_avg)+'\n')
+                    with open('./results/'+self.agent+'/test_window_avg_'+self.filename,'a') as f:
+                        f.write(str(window_avg)+'\n')
+
+            print('\tAverage Rewards for last %d episodes: %.2f' % (NUM_EPS_UPDATE,window_avg))
+            self.window_accumulated_reward = 0.0
+
 
 class Policy:
     def __init__(self) -> None:
@@ -48,9 +110,8 @@ class Policy:
 
     def grad(self,t:int)->None:
         """
-                         
             grad(log_pi) = feature i of Action A - Sum[ pi(s,b) * feature i of b] 
-            ∇ π_w(s,a) = fi(s,a) −∑ π_w(s,b) * fi(s,b)
+            ∇ π_w(s,a) = fi(s,a) − ∑ π_w(s,b) * fi(s,b)
         """
         feature_t = self.saved_features_t[t]
         action_probs_t = self.saved_probs_t[t]
@@ -74,7 +135,7 @@ class Policy:
 
 
 
-class ReinforceAgent(game.Agent):
+class ReinforceAgent(ReinforcementLearingAgent):
     """
     REINFORCE ALGORITHM:
     Policy: a differential policy pi(a|s, theta)
@@ -87,42 +148,30 @@ class ReinforceAgent(game.Agent):
             theta <- theta + learing_rate * gradient_policy_loss
     """
 
-    def __init__(self, numTraining=100, epsilon=0.8, alpha=2e-12, gamma=0.9):
+    def __init__(self, **args):
+        args['agent']="ReinforceAgent"
+        ReinforcementLearingAgent.__init__(self, **args)
+
         print("REINFORCE Agent initialized")
-        self.numTraining = numTraining
-        # Parameters:
-        self.gamma = gamma #Discount factor
-        self.alpha = alpha #Learing rate
-        self.epsilon = epsilon
         self.policy = Policy()
-        self.feature_extractor = SimpleExtractor()
-
-        # episode track
-        self.episode = 0
-        self.episode_reward=0
-
-        # Episode score track
-        self.last_score = 0
-        self.episode_record = ()
-
-        self.last_action = None
+       
 
     def final(self, state:GameState):
         if state.isWin() or state.isLose():
             reward = state.getScore()-self.last_score
-            self.episode_reward += reward
+            self.total_accumulated_reward += reward
+            self.window_accumulated_reward += reward
             self.policy.rewards.append(reward)
 
 
         # Updating the trainable parameters
         self.train()
 
-        print(f"Episode {self.episode} finished score: {self.episode_reward}")
-
-        # Reseting epsiode state
         self.episode+=1
-        self.episode_reward=0
-        self.last_score = 0
+        self.results()
+        
+        # Important Donot change
+        self.last_score = 0.0
         self.last_action = None
 
 
@@ -144,7 +193,8 @@ class ReinforceAgent(game.Agent):
         if self.last_action:
             # Reward occured for last action
             reward = state.getScore()-self.last_score
-            self.episode_reward += reward
+            self.total_accumulated_reward += reward
+            self.window_accumulated_reward += reward
             self.policy.rewards.append(reward)
 
         self.last_score = state.getScore()
@@ -255,7 +305,7 @@ class Critic:
 
 
 
-class ActorCriticAgent(game.Agent):
+class ActorCriticAgent(ReinforcementLearingAgent):
     """
     ACTOR CRITIC ALGORITHM
 
@@ -278,36 +328,24 @@ class ActorCriticAgent(game.Agent):
         
         I <- gamma * I
     """
-    def __init__(self, numTraining=100, epsilon=0.8, alpha=1e-2, gamma=0.9):
-        print("Actor Critic Agent initialized")
+    def __init__(self, **args):
+        args['agent']="ActorCriticAgent"
+        ReinforcementLearingAgent.__init__(self, **args)
 
-        self.numTraining = numTraining
-        # Parameters:
-        self.gamma = gamma #Discount factor
-        self.alpha = alpha #Learing rate
-        self.epsilon = epsilon
+        print("Actor Critic Agent initialized")
         self.policy = Policy()
         self.critic = Critic()
-        self.feature_extractor = SimpleExtractor()
-
-        self.I = 1
-        # episode track
-        self.episode = 0
-        self.episode_reward=0
-
-        # Episode score track
-        self.last_score = 0
-        self.episode_record = ()
-
-        self.last_state = None
+        self.I = 1.0
     
     def final(self, state:GameState):
         self.train(state)
-
-        print(f"Episode {self.episode} finished score: {self.episode_reward}")
         self.episode+=1
-        self.episode_reward=0
-        self.last_score = 0
+
+
+        self.results()
+
+        # Important Donot change
+        self.last_score = 0.0
         self.last_state = None
 
 
@@ -327,7 +365,8 @@ class ActorCriticAgent(game.Agent):
     def train(self,state:GameState):
 
         R = state.getScore()-self.last_score
-        self.episode_reward += R
+        self.total_accumulated_reward += R
+        self.window_accumulated_reward += R
         self.last_score = state.getScore()
         
         last_state_feature = self.feature_extractor.getFeatures(self.last_state)
