@@ -11,7 +11,6 @@ CONST_NEWLINE = "\n"
 class MiniGrid:
     CONST_VERTICAL = 0
     CONST_HORIZONTAL = 1 
-
     CONST_LEFT = 2
     CONST_RIGHT = 3
     CONST_UP = 4
@@ -215,38 +214,38 @@ class Grid:
         f.write(self.__fullGridString + CONST_NEWLINE)
         f.close()
 
+if __name__ == "__main__":
+    """
+        USAGE:      python layoutGenerator.py <options>
+        OPTIONS:    
+                -g  Size of the grid, Assumed grid is a square,
+                    gridDimension is even and length of square grid's side
+                -m  This parameter allows you to split up the bigger grid into smaller ones,
+                    the smaller this value, the more wall-dense the grid becomes
+                -c  Number of capsules to add to the grid at random cells.
+                -f  Save file name 
 
-# _____________Driver code_____________
-# A sample command
-# python gridMaker.py -g 20 -m 3 -c 3
+        EXAMPLE:    python layoutGenerator.py -g 20 -m 3 -c 3 -s randomClassic.lay
+    """
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-g", required=True, type=int, help="Size of the grid")
+    parser.add_argument("-m", required=True, type=int, help="Size of the miniGrid. miniGrids make up the main grid")
+    parser.add_argument("-c", type=int, help="Number of capsules to add to the grid", default=0)
+    parser.add_argument("-f", type=str, help="Save file name")
+    args = parser.parse_args()
 
-parser = argparse.ArgumentParser()
-parser.add_argument("-g", required=True, type=int, help="Size of the grid")
-parser.add_argument("-m", required=True, type=int, help="Size of the miniGrid. miniGrids make up the main grid")
-parser.add_argument("-c", type=int, help="Number of capsules to add to the grid", default=0)
-args = parser.parse_args()
+    gridDimension = args.g
+    miniGridDimension = args.m
+    capsuleCount = args.c
+    fileName = args.f
 
-# Inputs    
-    # Assumed grid is a square
-    # Assumed gridDimension is even and length of square grid's side
-gridDimension = args.g
-
-    # miniGrid dimension
-    # This parameter allows you to split up the bigger grid into smaller ones. 
-    # The smaller this value, the more wall-dense the grid becomes
-miniGridDimension = args.m
-
-capsuleCount = args.c
-
-# Validations
     # Ensures board symmetry
-if((gridDimension % 2) != 0):
-    raise Exception("maze dimension must be even!")
-if((gridDimension//2) < miniGridDimension):
-    raise Exception("miniGridDimensions must be <= halfGridDimension")
+    if((gridDimension % 2) != 0):
+        raise Exception("-g Grid dimension must be even!")
+    if((gridDimension//2) < miniGridDimension):
+        raise Exception("-m Mini Grid dimensions must be less than half grid dimension")
+    if not fileName:
+        raise Exception("-f Name of file needs to be specified")
 
-o = Grid(gridDimension, miniGridDimension, capsuleCount)
-print(o)
-
-#   Overwrite an existing layout to avoid extra overhead of adding layout to simulator's in-memory indices.
-o.writeToFile("./capsuleClassic.lay")
+    layoutGenerator = Grid(gridDimension, miniGridDimension, capsuleCount)
+    layoutGenerator.writeToFile("./layouts/"+fileName)
