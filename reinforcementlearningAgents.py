@@ -132,9 +132,6 @@ class Policy:
             self.weights[feature] = self.weights[feature] + (lr * factor * self.grad_weights[feature])
 
 
-
-
-
 class ReinforceAgent(ReinforcementLearingAgent):
     """
     REINFORCE ALGORITHM:
@@ -228,7 +225,6 @@ class ReinforceAgent(ReinforcementLearingAgent):
         del self.policy.saved_probs_t[:]
 
 
-
     def getAction(self, state:GameState):
         legal_action = state.getLegalPacmanActions()
         features_s_a = [self.feature_extractor.getFeatures(state,action) for action in legal_action]
@@ -240,12 +236,6 @@ class ReinforceAgent(ReinforcementLearingAgent):
             action_index = action_probs.index(max(action_probs))
         else:
             action_index = random.choices(range(len(action_probs)), weights=action_probs)[0]
-        
-            # action_index = random.choices(
-            #     [action_probs.index(max(action_probs)),random.choices(range(len(action_probs)), weights=action_probs)[0]],
-            #     weights=[self.epsilon,1-self.epsilon]
-            # )[0]
-
 
         action = legal_action[action_index]
 
@@ -256,9 +246,6 @@ class ReinforceAgent(ReinforcementLearingAgent):
 
         self.last_action = action
         return self.last_action
-
-
-
 
 class Critic:
     def __init__(self) -> None:
@@ -302,7 +289,6 @@ class Critic:
     def optimize(self,lr:float,factor:float)->None:
         for feature in self.weights:
             self.weights[feature] = self.weights[feature] + (lr * factor * self.grad_weights[feature])
-
 
 
 class ActorCriticAgent(ReinforcementLearingAgent):
@@ -371,7 +357,6 @@ class ActorCriticAgent(ReinforcementLearingAgent):
         
         last_state_feature = self.feature_extractor.getFeatures(self.last_state)
         state_feature = self.feature_extractor.getFeatures(state)
-    
 
         value = self.critic.forward(last_state_feature)
         if state.isWin() or state.isLose():
@@ -398,8 +383,6 @@ class ActorCriticAgent(ReinforcementLearingAgent):
         del self.policy.saved_probs_t[:]
 
 
-
-
     def getAction(self, state:GameState):
         """
             Taking action defined by proability distribution pi during training 
@@ -416,9 +399,7 @@ class ActorCriticAgent(ReinforcementLearingAgent):
         else:
             action_index = random.choices(range(len(action_probs)), weights=action_probs)[0]
         
-
         action = legal_action[action_index]
-
 
         self.policy.saved_features_t.append(features_s_a)
         self.policy.saved_action_t.append(action_index)
