@@ -162,7 +162,7 @@ class ReinforcementAgent(ValueEstimationAgent):
     def isInTesting(self):
         return not self.isInTraining()
 
-    def __init__(self, filename=None, actionFn = None, numTraining=100, epsilon=0.5, alpha=0.5, gamma=1):
+    def __init__(self, filename=None, actionFn = None, agent=None, numTraining=100, epsilon=0.5, alpha=0.5, gamma=1):
         """
         actionFn: Function which takes a state and returns the list of legal actions
 
@@ -182,6 +182,7 @@ class ReinforcementAgent(ValueEstimationAgent):
         self.alpha = float(alpha)
         self.discount = float(gamma)
         self.filename = filename
+        self.agent = agent
     ################################
     # Controls needed for Crawler  #
     ################################
@@ -236,7 +237,7 @@ class ReinforcementAgent(ValueEstimationAgent):
         self.lastWindowAccumRewards += state.getScore()
 
         if self.episodesSoFar % NUM_EPS_UPDATE == 0:
-            print('Reinforcement Learning Status:')
+            print(f'{self.agent} Learning Status:')
             windowAvg = self.lastWindowAccumRewards / float(NUM_EPS_UPDATE)
             if self.episodesSoFar <= self.numTraining:
                 trainAvg = self.accumTrainRewards / float(self.episodesSoFar)

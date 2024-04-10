@@ -130,7 +130,7 @@ class QLearningAgent(ReinforcementAgent):
 class PacmanQAgent(QLearningAgent):
     "Exactly the same as QLearningAgent, but with different default parameters"
 
-    def __init__(self, epsilon=0.05,gamma=0.8,alpha=0.2, numTraining=0, **args):
+    def __init__(self, epsilon=0.05,gamma=0.9,alpha=2e-4, numTraining=0, **args):
         """
         These default parameters can be changed from the pacman.py command line.
         For example, to change the exploration rate, try:
@@ -168,6 +168,7 @@ class ApproximateQAgent(PacmanQAgent):
        should work as is.
     """
     def __init__(self, extractor='SimpleExtractor', **args):
+        args['agent']="ApproximateQAgent"
         self.featExtractor = util.lookup(extractor, globals())()
         PacmanQAgent.__init__(self, **args)
         self.weights = util.Counter()
@@ -195,9 +196,7 @@ class ApproximateQAgent(PacmanQAgent):
           if self.weights[feature]:
             self.weights[feature] = self.weights[feature] + (self.alpha * difference * features[feature])
           else:
-            # Randomly intialize weights
-            self.weights[feature] = random.uniform(-10, 10)
-            self.weights[feature] = self.weights[feature] + (self.alpha * difference * features[feature])
+            self.weights[feature] = 1e-12 + (self.alpha * difference * features[feature])
 
     def final(self, state):
         "Called at the end of each game."

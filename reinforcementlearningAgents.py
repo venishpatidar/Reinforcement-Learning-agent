@@ -1,14 +1,12 @@
 import random,util,math
 from game import Agent
-from pacman import GameState
 from featureExtractors import *
 
 # Global parameters
-random.seed(10)
 NUM_EPS_UPDATE = 100
 
 class ReinforcementLearingAgent(Agent):
-    def __init__(self, filename=None, agent=None, numTraining=100, epsilon=0.8, alpha=1e-2, gamma=0.9):
+    def __init__(self, filename=None, agent=None, numTraining=100, epsilon=0.05, alpha=2e-4, gamma=0.9):
         self.numTraining = numTraining
         # Parameters:
         self.filename = filename
@@ -35,7 +33,7 @@ class ReinforcementLearingAgent(Agent):
             Saves the results to file 
         """
         if self.episode % NUM_EPS_UPDATE == 0:
-            print('Actor Ctitic Agent Learning Status:')
+            print(f'{self.agent} Learning Status:')
             window_avg = self.window_accumulated_reward / float(NUM_EPS_UPDATE)
             # In training
             if self.episode <= self.numTraining:
@@ -68,7 +66,7 @@ class ReinforcementLearingAgent(Agent):
 
 
 class Policy:
-    def __init__(self) -> None:
+    def __init__(self):
         # Parameter theta 
         self.weights = util.Counter()
         self.grad_weights = util.Counter()
@@ -79,7 +77,7 @@ class Policy:
         self.saved_probs_t = []
         self.saved_action_t = []
 
-    def softmax(self,x:list[float])->list[float]:
+    def softmax(self,x):
         """
             Apply softmax activation function and
             returns proability distribution
@@ -90,25 +88,27 @@ class Policy:
         return [math.exp(element)/denominator for element in x]
 
     
-    def forward(self, x:list[dict])->list[float]:
+    def forward(self, x):
         """
             Returns proability distribution of taking action a at t given state at t 
             and parameters w
             Pi(a_t | s_t, w) = Pr(a_t | s_t, w) = softmax(w_0 + (w_1 * x_1) + (w_2 * x_2) ...., w_0 + (w_1 * x1)... )
         """
-        h_w_x = [1e-6]*len(x)
+        h_w_x = [1e-12]*len(x)
         for i, s_a in enumerate(x):
             for feature in s_a:
+                h_w_x[i] = h_w_x[i] + self.weights[feature] * x[i][feature]
                 if self.weights[feature]:
                     h_w_x[i] = h_w_x[i] + self.weights[feature] * x[i][feature]
                 else:
                     self.weights[feature] = random.uniform(-10, 10)
-                    h_w_x[i] = h_w_x[i] + self.weights[feature] * x[i][feature]
+                    h_w_x[i] = h_w_x[i] + 1e-12 * x[i][feature]
+
 
         pi = self.softmax(h_w_x)
         return pi
 
-    def grad(self,t:int)->None:
+    def grad(self,t):
         """
             grad(log_pi) = feature i of Action A - Sum[ pi(s,b) * feature i of b] 
             ∇ π_w(s,a) = fi(s,a) − ∑ π_w(s,b) * fi(s,b)
@@ -124,7 +124,7 @@ class Policy:
             self.grad_weights[feature] = selected_s_a_feature[feature] - sum_probs[feature]
 
 
-    def optimize(self,lr:float,factor:float)->None:
+    def optimize(self,lr,factor):
         """
             Gradient Asscent
         """
@@ -153,7 +153,7 @@ class ReinforceAgent(ReinforcementLearingAgent):
         self.policy = Policy()
        
 
-    def final(self, state:GameState):
+    def final(self, state):
         if state.isWin() or state.isLose():
             reward = state.getScore()-self.last_score
             self.total_accumulated_reward += reward
@@ -171,8 +171,12 @@ class ReinforceAgent(ReinforcementLearingAgent):
         self.last_score = 0.0
         self.last_action = None
 
+        if self.episode == self.numTraining:
+            msg = 'Training Done (turning off epsilon and alpha)'
+            print('%s\n%s' % (msg,'-' * len(msg)))
 
-    def observationFunction(self, state:GameState)->GameState:
+
+    def observationFunction(self, state):
         """
             This is where we ended up after our last action.
             The simulation somehow enusers to call this step
@@ -181,7 +185,7 @@ class ReinforceAgent(ReinforcementLearingAgent):
         self.observationStep(state)
         return state
     
-    def observationStep(self, state:GameState):
+    def observationStep(self, state):
         """
             Recording an episode
             Recording rewards and states after the last action had placed
@@ -225,7 +229,7 @@ class ReinforceAgent(ReinforcementLearingAgent):
         del self.policy.saved_probs_t[:]
 
 
-    def getAction(self, state:GameState):
+    def getAction(self, state):
         legal_action = state.getLegalPacmanActions()
         features_s_a = [self.feature_extractor.getFeatures(state,action) for action in legal_action]
         
@@ -235,10 +239,13 @@ class ReinforceAgent(ReinforcementLearingAgent):
         if self.numTraining<=self.episode:        
             action_index = action_probs.index(max(action_probs))
         else:
-            action_index = random.choices(range(len(action_probs)), weights=action_probs)[0]
+            # Epsilon greedy: with proability epsilon select random action
+            action_index = random.choices(
+                [action_probs.index(max(action_probs)),random.choices(range(len(action_probs)), weights=action_probs)[0]],
+                weights=[1-self.epsilon,self.epsilon]
+             )[0]
 
         action = legal_action[action_index]
-
 
         self.policy.saved_features_t.append(features_s_a)
         self.policy.saved_action_t.append(action_index)
@@ -248,12 +255,12 @@ class ReinforceAgent(ReinforcementLearingAgent):
         return self.last_action
 
 class Critic:
-    def __init__(self) -> None:
+    def __init__(self):
         # Parameter omega 
         self.weights = util.Counter()
         self.grad_weights = util.Counter()
 
-    def relu(self,x:float)->float:
+    def relu(self,x):
         """
             Apply relu activation function 
             input: [-a, b, c, d]
@@ -261,7 +268,7 @@ class Critic:
         """
         return max(0,x)
     
-    def forward(self, x:dict)->float:
+    def forward(self, x):
         """
             Returns value of state S at t
             and parameters w
@@ -272,13 +279,12 @@ class Critic:
             if self.weights[feature]:
                 v_s_w = v_s_w + self.weights[feature] * x[feature]
             else:
-                self.weights[feature] = random.uniform(-10, 10)
-                v_s_w = v_s_w + self.weights[feature] * x[feature]
+                v_s_w = v_s_w + 1e-12 * x[feature]
 
         v = self.relu(v_s_w)
         return v
 
-    def grad(self,last_state:dict)->None:
+    def grad(self,last_state):
         for feature in last_state:
             # Relu gradient
             if self.weights[feature]*last_state[feature]>0:
@@ -323,7 +329,7 @@ class ActorCriticAgent(ReinforcementLearingAgent):
         self.critic = Critic()
         self.I = 1.0
     
-    def final(self, state:GameState):
+    def final(self, state):
         self.train(state)
         self.episode+=1
 
@@ -334,8 +340,12 @@ class ActorCriticAgent(ReinforcementLearingAgent):
         self.last_score = 0.0
         self.last_state = None
 
+        if self.episode == self.numTraining:
+            msg = 'Training Done (turning off epsilon and alpha)'
+            print('%s\n%s' % (msg,'-' * len(msg)))
 
-    def observationFunction(self, state:GameState)->GameState:
+
+    def observationFunction(self, state):
         """
             This is where we ended up after our last action.
             The simulation somehow enusers to call this step
@@ -344,11 +354,11 @@ class ActorCriticAgent(ReinforcementLearingAgent):
         self.observationStep(state)
         return state
     
-    def observationStep(self, state:GameState):
+    def observationStep(self, state):
         if self.last_state:
             self.train(state)
 
-    def train(self,state:GameState):
+    def train(self,state):
 
         R = state.getScore()-self.last_score
         self.total_accumulated_reward += R
@@ -383,7 +393,7 @@ class ActorCriticAgent(ReinforcementLearingAgent):
         del self.policy.saved_probs_t[:]
 
 
-    def getAction(self, state:GameState):
+    def getAction(self, state):
         """
             Taking action defined by proability distribution pi during training 
             and taking max action while training is done
@@ -397,8 +407,12 @@ class ActorCriticAgent(ReinforcementLearingAgent):
         if self.numTraining<=self.episode:        
             action_index = action_probs.index(max(action_probs))
         else:
-            action_index = random.choices(range(len(action_probs)), weights=action_probs)[0]
-        
+            # Epsilon greedy: with proability epsilon select random action
+            action_index = random.choices(
+                [action_probs.index(max(action_probs)),random.choices(range(len(action_probs)), weights=action_probs)[0]],
+                weights=[1-self.epsilon,self.epsilon]
+             )[0]
+            
         action = legal_action[action_index]
 
         self.policy.saved_features_t.append(features_s_a)
