@@ -286,12 +286,18 @@ class Grid:
         
         # Add bottom border wall
         self.__fullGrid.append([CONST_WALL] * len(spacerRow))
-
-        # Add first row with ghosts in the right. This is the topmost row, so ghosts end up in top right
-        self.__fullGrid.insert(0, spacerRow[:-5] + ([CONST_GHOST] * 4) + [CONST_WALL])
         
         # Add top border wall
+        self.__fullGrid.insert(0, spacerRow.copy())
         self.__fullGrid.insert(0, [CONST_WALL] * len(spacerRow))
+
+        # Add ghosts to center column sparating halfGrids
+        midColumn = len(self.__fullGrid[0])//2
+        midRow = len(self.__fullGrid)//2
+        self.__fullGrid[midRow][midColumn] = CONST_GHOST
+        self.__fullGrid[midRow - 1][midColumn] = CONST_GHOST
+        self.__fullGrid[midRow + 1][midColumn] = CONST_GHOST
+        self.__fullGrid[midRow - 2][midColumn] = CONST_GHOST
 
         # Add pacman in bottom left
         self.__fullGrid[-2][1] = CONST_PACMAN
