@@ -5,7 +5,9 @@ import matplotlib.pyplot as plt
 
 def read_values_from_folder(folder_path):
     all_values = []
-    for file_name in os.listdir(folder_path):
+    start = 0
+    end = 100
+    for file_name in os.listdir(folder_path)[start:end]:
         if file_name.startswith('train_avg'):  # Assuming files have a .txt extension
             file_path = os.path.join(folder_path, file_name)
             with open(file_path, 'r') as file:

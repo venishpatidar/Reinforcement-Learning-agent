@@ -120,7 +120,7 @@ class MiniGrid:
         self.__grid = []
         for _ in range(r):
             #   Fill all empty spaces with food initially. Walls will replace them later during generation
-            self.__grid.append([CONST_FOOD] * c)
+            self.__grid.append([random.choice([CONST_FOOD,CONST_WALL])] * c)
         
         if((r == 1) or (c == 1)): 
             self.__createLinearGrid()
@@ -285,10 +285,11 @@ class Grid:
             self.__fullGrid += finalFullRows
         
         # Add bottom border wall
+        self.__fullGrid.pop()
         self.__fullGrid.append([CONST_WALL] * len(spacerRow))
         
         # Add top border wall
-        self.__fullGrid.insert(0, spacerRow.copy())
+        # self.__fullGrid.insert(1, spacerRow.copy())
         self.__fullGrid.insert(0, [CONST_WALL] * len(spacerRow))
 
         # Add ghosts to center column sparating halfGrids
@@ -300,7 +301,7 @@ class Grid:
         self.__fullGrid[midRow - 2][midColumn] = CONST_GHOST
 
         # Add pacman in bottom left
-        self.__fullGrid[-2][1] = CONST_PACMAN
+        self.__fullGrid[random.randint(1,self.__gridDim-1)][random.randint(1,(self.__gridDim-1))] = CONST_PACMAN
 
     #   Add capsules randomly to free spaces available in the grid
     def __addCapsules(self):
