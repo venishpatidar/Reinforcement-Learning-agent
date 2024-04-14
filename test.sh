@@ -72,9 +72,9 @@ done
 
 # Testing all RL agents on each layout in parallel
 for layout in "${layouts[@]}"; do
+    num_ghost=$(python -c "import numpy as np; print(int(np.random.randint(2, 4)))")
     for agent in "${agents[@]}"; do
         echo ""
-        num_ghost=$(python -c "import numpy as np; print(int(np.random.randint(2, 4)))")
         echo "Training ${agent} on layout ${layout}"
         train_agent $agent $layout $num_runs $num_training $num_ghost $layout &
     done
