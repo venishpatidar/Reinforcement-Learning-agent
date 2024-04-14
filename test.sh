@@ -45,7 +45,6 @@ generate_layout() {
 
 # Function to test RL agent on a layout
 train_agent() {
-    echo ${6}_k$5
     python pacman.py -p $1 -l $2 -q -n $3 -x $4 -k $5 -a filename=${6}_k$5
 }
 
