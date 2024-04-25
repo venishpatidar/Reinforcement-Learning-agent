@@ -271,23 +271,6 @@
             "null_hypothesis": "rejected"
         }
     },
-    "train_avg_layout_2024041406_69_k3": {
-        "ActorCriticAgent-ApproximateQAgent": {
-            "t_stat": 79.73656632500447,
-            "p_value": 0.0,
-            "null_hypothesis": "rejected"
-        },
-        "ActorCriticAgent-ReinforceAgent": {
-            "t_stat": 134.60666896819808,
-            "p_value": 0.0,
-            "null_hypothesis": "rejected"
-        },
-        "ApproximateQAgent-ReinforceAgent": {
-            "t_stat": 191.38482597661041,
-            "p_value": 0.0,
-            "null_hypothesis": "rejected"
-        }
-    },
     "train_avg_layout_2024041407_16_k2": {
         "ActorCriticAgent-ApproximateQAgent": {
             "t_stat": 143.3954179353926,
@@ -353,23 +336,6 @@
         "ApproximateQAgent-ReinforceAgent": {
             "t_stat": -101.2078253225128,
             "p_value": 0.0,
-            "null_hypothesis": "rejected"
-        }
-    },
-    "train_avg_layout_2024041410_35_k2": {
-        "ActorCriticAgent-ApproximateQAgent": {
-            "t_stat": 128.61212894383354,
-            "p_value": 0.0,
-            "null_hypothesis": "rejected"
-        },
-        "ActorCriticAgent-ReinforceAgent": {
-            "t_stat": 120.99558376496091,
-            "p_value": 0.0,
-            "null_hypothesis": "rejected"
-        },
-        "ApproximateQAgent-ReinforceAgent": {
-            "t_stat": -31.677355736967975,
-            "p_value": 1.7590091997732598e-160,
             "null_hypothesis": "rejected"
         }
     },
@@ -441,40 +407,6 @@
             "null_hypothesis": "rejected"
         }
     },
-    "train_avg_layout_2024041414_29_k3": {
-        "ActorCriticAgent-ApproximateQAgent": {
-            "t_stat": 169.50435659487619,
-            "p_value": 0.0,
-            "null_hypothesis": "rejected"
-        },
-        "ActorCriticAgent-ReinforceAgent": {
-            "t_stat": 109.72261567329713,
-            "p_value": 0.0,
-            "null_hypothesis": "rejected"
-        },
-        "ApproximateQAgent-ReinforceAgent": {
-            "t_stat": -299.9779537502239,
-            "p_value": 0.0,
-            "null_hypothesis": "rejected"
-        }
-    },
-    "train_avg_layout_2024041414_70_k2": {
-        "ActorCriticAgent-ApproximateQAgent": {
-            "t_stat": 180.77023044501334,
-            "p_value": 0.0,
-            "null_hypothesis": "rejected"
-        },
-        "ActorCriticAgent-ReinforceAgent": {
-            "t_stat": 114.65686436291949,
-            "p_value": 0.0,
-            "null_hypothesis": "rejected"
-        },
-        "ApproximateQAgent-ReinforceAgent": {
-            "t_stat": -199.3919563935714,
-            "p_value": 0.0,
-            "null_hypothesis": "rejected"
-        }
-    },
     "train_avg_layout_2024041415_2_k2": {
         "ActorCriticAgent-ApproximateQAgent": {
             "t_stat": 116.50136382811061,
@@ -488,40 +420,6 @@
         },
         "ApproximateQAgent-ReinforceAgent": {
             "t_stat": -55.3212266659309,
-            "p_value": 0.0,
-            "null_hypothesis": "rejected"
-        }
-    },
-    "train_avg_layout_2024041415_3_k3": {
-        "ActorCriticAgent-ApproximateQAgent": {
-            "t_stat": 97.75920558640502,
-            "p_value": 0.0,
-            "null_hypothesis": "rejected"
-        },
-        "ActorCriticAgent-ReinforceAgent": {
-            "t_stat": 146.24076983450936,
-            "p_value": 0.0,
-            "null_hypothesis": "rejected"
-        },
-        "ApproximateQAgent-ReinforceAgent": {
-            "t_stat": 180.6121789730781,
-            "p_value": 0.0,
-            "null_hypothesis": "rejected"
-        }
-    },
-    "train_avg_layout_2024041415_43_k3": {
-        "ActorCriticAgent-ApproximateQAgent": {
-            "t_stat": 195.1585737621342,
-            "p_value": 0.0,
-            "null_hypothesis": "rejected"
-        },
-        "ActorCriticAgent-ReinforceAgent": {
-            "t_stat": 127.67735683698557,
-            "p_value": 0.0,
-            "null_hypothesis": "rejected"
-        },
-        "ApproximateQAgent-ReinforceAgent": {
-            "t_stat": -264.7394361476569,
             "p_value": 0.0,
             "null_hypothesis": "rejected"
         }
@@ -628,40 +526,6 @@
             "null_hypothesis": "rejected"
         }
     },
-    "train_avg_layout_2024041417_64_k2": {
-        "ActorCriticAgent-ApproximateQAgent": {
-            "t_stat": 178.11509483880502,
-            "p_value": 0.0,
-            "null_hypothesis": "rejected"
-        },
-        "ActorCriticAgent-ReinforceAgent": {
-            "t_stat": 120.74140703728267,
-            "p_value": 0.0,
-            "null_hypothesis": "rejected"
-        },
-        "ApproximateQAgent-ReinforceAgent": {
-            "t_stat": -227.0089608322981,
-            "p_value": 0.0,
-            "null_hypothesis": "rejected"
-        }
-    },
-    "train_avg_layout_2024041417_6_k2": {
-        "ActorCriticAgent-ApproximateQAgent": {
-            "t_stat": 221.9093698717087,
-            "p_value": 0.0,
-            "null_hypothesis": "rejected"
-        },
-        "ActorCriticAgent-ReinforceAgent": {
-            "t_stat": 129.4102913728531,
-            "p_value": 0.0,
-            "null_hypothesis": "rejected"
-        },
-        "ApproximateQAgent-ReinforceAgent": {
-            "t_stat": -305.2394569897525,
-            "p_value": 0.0,
-            "null_hypothesis": "rejected"
-        }
-    },
     "train_avg_layout_2024041417_78_k2": {
         "ActorCriticAgent-ApproximateQAgent": {
             "t_stat": 145.39236869376583,
@@ -710,23 +574,6 @@
         "ApproximateQAgent-ReinforceAgent": {
             "t_stat": -37.921796057631305,
             "p_value": 2.1730286864592743e-207,
-            "null_hypothesis": "rejected"
-        }
-    },
-    "train_avg_layout_2024041418_9_k3": {
-        "ActorCriticAgent-ApproximateQAgent": {
-            "t_stat": 183.67504380473426,
-            "p_value": 0.0,
-            "null_hypothesis": "rejected"
-        },
-        "ActorCriticAgent-ReinforceAgent": {
-            "t_stat": 137.78815439402723,
-            "p_value": 0.0,
-            "null_hypothesis": "rejected"
-        },
-        "ApproximateQAgent-ReinforceAgent": {
-            "t_stat": -177.5019942630585,
-            "p_value": 0.0,
             "null_hypothesis": "rejected"
         }
     },
@@ -849,23 +696,6 @@
             "null_hypothesis": "rejected"
         }
     },
-    "train_avg_layout_2024041425_58_k2": {
-        "ActorCriticAgent-ApproximateQAgent": {
-            "t_stat": 119.37099475736859,
-            "p_value": 0.0,
-            "null_hypothesis": "rejected"
-        },
-        "ActorCriticAgent-ReinforceAgent": {
-            "t_stat": 133.3186313403506,
-            "p_value": 0.0,
-            "null_hypothesis": "rejected"
-        },
-        "ApproximateQAgent-ReinforceAgent": {
-            "t_stat": 60.95274801654397,
-            "p_value": 0.0,
-            "null_hypothesis": "rejected"
-        }
-    },
     "train_avg_layout_2024041425_99_k2": {
         "ActorCriticAgent-ApproximateQAgent": {
             "t_stat": 181.8843638160032,
@@ -913,23 +743,6 @@
         },
         "ApproximateQAgent-ReinforceAgent": {
             "t_stat": -155.12614818895364,
-            "p_value": 0.0,
-            "null_hypothesis": "rejected"
-        }
-    },
-    "train_avg_layout_2024041426_37_k3": {
-        "ActorCriticAgent-ApproximateQAgent": {
-            "t_stat": 268.24145113105845,
-            "p_value": 0.0,
-            "null_hypothesis": "rejected"
-        },
-        "ActorCriticAgent-ReinforceAgent": {
-            "t_stat": 204.42561589174267,
-            "p_value": 0.0,
-            "null_hypothesis": "rejected"
-        },
-        "ApproximateQAgent-ReinforceAgent": {
-            "t_stat": -233.06302953413882,
             "p_value": 0.0,
             "null_hypothesis": "rejected"
         }
@@ -1087,23 +900,6 @@
             "null_hypothesis": "rejected"
         }
     },
-    "train_avg_layout_2024041433_86_k3": {
-        "ActorCriticAgent-ApproximateQAgent": {
-            "t_stat": 211.6594304656169,
-            "p_value": 0.0,
-            "null_hypothesis": "rejected"
-        },
-        "ActorCriticAgent-ReinforceAgent": {
-            "t_stat": 113.28342516754533,
-            "p_value": 0.0,
-            "null_hypothesis": "rejected"
-        },
-        "ApproximateQAgent-ReinforceAgent": {
-            "t_stat": -611.488416759488,
-            "p_value": 0.0,
-            "null_hypothesis": "rejected"
-        }
-    },
     "train_avg_layout_2024041434_52_k3": {
         "ActorCriticAgent-ApproximateQAgent": {
             "t_stat": 154.56632412858477,
@@ -1223,23 +1019,6 @@
             "null_hypothesis": "rejected"
         }
     },
-    "train_avg_layout_2024041437_93_k2": {
-        "ActorCriticAgent-ApproximateQAgent": {
-            "t_stat": 210.66142677378545,
-            "p_value": 0.0,
-            "null_hypothesis": "rejected"
-        },
-        "ActorCriticAgent-ReinforceAgent": {
-            "t_stat": 242.33129443435976,
-            "p_value": 0.0,
-            "null_hypothesis": "rejected"
-        },
-        "ApproximateQAgent-ReinforceAgent": {
-            "t_stat": 81.95279131611788,
-            "p_value": 0.0,
-            "null_hypothesis": "rejected"
-        }
-    },
     "train_avg_layout_2024041438_13_k2": {
         "ActorCriticAgent-ApproximateQAgent": {
             "t_stat": 60.31490858188269,
@@ -1271,23 +1050,6 @@
         "ApproximateQAgent-ReinforceAgent": {
             "t_stat": 36.67408539994328,
             "p_value": 4.9539175663719724e-198,
-            "null_hypothesis": "rejected"
-        }
-    },
-    "train_avg_layout_2024041440_87_k3": {
-        "ActorCriticAgent-ApproximateQAgent": {
-            "t_stat": 171.2831391607011,
-            "p_value": 0.0,
-            "null_hypothesis": "rejected"
-        },
-        "ActorCriticAgent-ReinforceAgent": {
-            "t_stat": 119.88444019754236,
-            "p_value": 0.0,
-            "null_hypothesis": "rejected"
-        },
-        "ApproximateQAgent-ReinforceAgent": {
-            "t_stat": -242.05725059217434,
-            "p_value": 0.0,
             "null_hypothesis": "rejected"
         }
     },
@@ -1342,23 +1104,6 @@
             "null_hypothesis": "rejected"
         }
     },
-    "train_avg_layout_2024041444_60_k2": {
-        "ActorCriticAgent-ApproximateQAgent": {
-            "t_stat": 255.8325674901518,
-            "p_value": 0.0,
-            "null_hypothesis": "rejected"
-        },
-        "ActorCriticAgent-ReinforceAgent": {
-            "t_stat": 195.53198895593843,
-            "p_value": 0.0,
-            "null_hypothesis": "rejected"
-        },
-        "ApproximateQAgent-ReinforceAgent": {
-            "t_stat": -239.97363640727968,
-            "p_value": 0.0,
-            "null_hypothesis": "rejected"
-        }
-    },
     "train_avg_layout_2024041444_81_k2": {
         "ActorCriticAgent-ApproximateQAgent": {
             "t_stat": 250.8304910606781,
@@ -1372,40 +1117,6 @@
         },
         "ApproximateQAgent-ReinforceAgent": {
             "t_stat": -292.28236914739796,
-            "p_value": 0.0,
-            "null_hypothesis": "rejected"
-        }
-    },
-    "train_avg_layout_2024041445_20_k2": {
-        "ActorCriticAgent-ApproximateQAgent": {
-            "t_stat": 196.17322262300263,
-            "p_value": 0.0,
-            "null_hypothesis": "rejected"
-        },
-        "ActorCriticAgent-ReinforceAgent": {
-            "t_stat": 133.5087288579506,
-            "p_value": 0.0,
-            "null_hypothesis": "rejected"
-        },
-        "ApproximateQAgent-ReinforceAgent": {
-            "t_stat": -260.2978609414565,
-            "p_value": 0.0,
-            "null_hypothesis": "rejected"
-        }
-    },
-    "train_avg_layout_2024041445_26_k2": {
-        "ActorCriticAgent-ApproximateQAgent": {
-            "t_stat": 259.16305804448876,
-            "p_value": 0.0,
-            "null_hypothesis": "rejected"
-        },
-        "ActorCriticAgent-ReinforceAgent": {
-            "t_stat": 144.74590983631242,
-            "p_value": 0.0,
-            "null_hypothesis": "rejected"
-        },
-        "ApproximateQAgent-ReinforceAgent": {
-            "t_stat": -327.5610945703929,
             "p_value": 0.0,
             "null_hypothesis": "rejected"
         }
@@ -1529,23 +1240,6 @@
             "null_hypothesis": "rejected"
         }
     },
-    "train_avg_layout_2024041452_61_k3": {
-        "ActorCriticAgent-ApproximateQAgent": {
-            "t_stat": 176.8976846162743,
-            "p_value": 0.0,
-            "null_hypothesis": "rejected"
-        },
-        "ActorCriticAgent-ReinforceAgent": {
-            "t_stat": 116.59425838736463,
-            "p_value": 0.0,
-            "null_hypothesis": "rejected"
-        },
-        "ApproximateQAgent-ReinforceAgent": {
-            "t_stat": -542.4390935737844,
-            "p_value": 0.0,
-            "null_hypothesis": "rejected"
-        }
-    },
     "train_avg_layout_2024041452_75_k2": {
         "ActorCriticAgent-ApproximateQAgent": {
             "t_stat": 191.5589074784519,
@@ -1597,23 +1291,6 @@
             "null_hypothesis": "rejected"
         }
     },
-    "train_avg_layout_2024041454_33_k3": {
-        "ActorCriticAgent-ApproximateQAgent": {
-            "t_stat": 202.8785807154648,
-            "p_value": 0.0,
-            "null_hypothesis": "rejected"
-        },
-        "ActorCriticAgent-ReinforceAgent": {
-            "t_stat": 121.19773442718346,
-            "p_value": 0.0,
-            "null_hypothesis": "rejected"
-        },
-        "ApproximateQAgent-ReinforceAgent": {
-            "t_stat": -331.99390270746306,
-            "p_value": 0.0,
-            "null_hypothesis": "rejected"
-        }
-    },
     "train_avg_layout_2024041454_82_k2": {
         "ActorCriticAgent-ApproximateQAgent": {
             "t_stat": 119.3573232712521,
@@ -1644,40 +1321,6 @@
         },
         "ApproximateQAgent-ReinforceAgent": {
             "t_stat": -403.9069520574864,
-            "p_value": 0.0,
-            "null_hypothesis": "rejected"
-        }
-    },
-    "train_avg_layout_2024041456_68_k2": {
-        "ActorCriticAgent-ApproximateQAgent": {
-            "t_stat": 259.3967780081329,
-            "p_value": 0.0,
-            "null_hypothesis": "rejected"
-        },
-        "ActorCriticAgent-ReinforceAgent": {
-            "t_stat": 149.53887317019039,
-            "p_value": 0.0,
-            "null_hypothesis": "rejected"
-        },
-        "ApproximateQAgent-ReinforceAgent": {
-            "t_stat": -392.1685943119845,
-            "p_value": 0.0,
-            "null_hypothesis": "rejected"
-        }
-    },
-    "train_avg_layout_2024041458_55_k2": {
-        "ActorCriticAgent-ApproximateQAgent": {
-            "t_stat": 202.42059663251348,
-            "p_value": 0.0,
-            "null_hypothesis": "rejected"
-        },
-        "ActorCriticAgent-ReinforceAgent": {
-            "t_stat": 156.38997648323684,
-            "p_value": 0.0,
-            "null_hypothesis": "rejected"
-        },
-        "ApproximateQAgent-ReinforceAgent": {
-            "t_stat": -164.8989599942864,
             "p_value": 0.0,
             "null_hypothesis": "rejected"
         }
